@@ -13,12 +13,12 @@ public class TestPlugins {
 	public void testPluginManifestWriting() throws XMLWriteException{
 		PluginManifest manifest = new PluginManifest();
 		manifest.setPluginName("test");
-		manifest.writeData(LeIRCApi.stream, Resources.DESKTOP);
+		manifest.writeData(LeIRCApi.stream, Resources.PLUGINS);
 	}
 	
 	@Test
 	public void testPluginManifestReading() throws XMLReadException{
-		PluginManifest manifest = PluginManifest.loadData(LeIRCApi.stream, new File(Resources.DESKTOP, "test.xml"));
+		PluginManifest manifest = PluginManifest.loadData(LeIRCApi.stream, new File(Resources.PLUGINS, "test.xml"));
 		System.out.println(manifest.getName());
 	}
 }

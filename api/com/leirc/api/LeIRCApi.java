@@ -1,5 +1,8 @@
 package com.leirc.api;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import com.google.common.eventbus.EventBus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,6 +17,7 @@ public final class LeIRCApi{
 	public static final Injector injector = Guice.createInjector(new LeIRCApiModule());
 	public static final EventBus bus = new EventBus(LeIRCApi.class.getSimpleName());
 	public static final XStream stream = new XStream();
+	public static final ExecutorService executor = Executors.newFixedThreadPool(10);
 	
 	static
 	{

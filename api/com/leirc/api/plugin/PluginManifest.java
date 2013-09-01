@@ -4,12 +4,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 
-import com.leirc.api.data.IXML;
+import com.google.gson.Gson;
+import com.leirc.api.data.IJSON;
+import com.leirc.api.exception.JsonWriteException;
 import com.leirc.api.exception.XMLReadException;
 import com.leirc.api.exception.XMLWriteException;
 import com.thoughtworks.xstream.XStream;
 
-public final class PluginManifest implements IXML{
+public final class PluginManifest implements IJSON{
 	private String pluginName;
 	
 	public PluginManifest(){}
@@ -23,7 +25,7 @@ public final class PluginManifest implements IXML{
 	}
 	
 	@Override
-	public void writeData(XStream stream, File dir) throws XMLWriteException {
+	public void writeData(Gson gson, File dir) throws JsonWriteException {
 		File output = new File(dir, this.getXMLFileName());
 		try(BufferedWriter writer = new BufferedWriter(new FileWriter(output))){
 			stream.toXML(this);
@@ -43,5 +45,10 @@ public final class PluginManifest implements IXML{
 	
 	public String getXMLFileName(){
 		return this.pluginName + ".xml";
+	}
+	
+	@Override
+	public String toString(){
+		return String.format("Plugin (%s)", this.getName());
 	}
 }

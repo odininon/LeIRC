@@ -1,12 +1,23 @@
 package com.leirc.api.user;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.leirc.api.LeIRCApi;
 import com.leirc.api.rsrc.Resources;
 
 public final class UserHelper{
 	private UserHelper(){}
+	
+	public static final User DEFAULT = new User("Default");
+
+	public static final List<User> users = new LinkedList<User>();
+	
+	static
+	{
+		users.add(DEFAULT);
+	}
 	
 	public static File getUserFile(String name, File dir){
 		return new File(dir, name + ".json");

@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -64,7 +65,13 @@ public abstract class ConfigurationBase{
 	}
 	
 	public final void addProperty(Property prop){
-		this.getProperties().add(prop);
+		if(!this.props.contains(prop)){
+			this.props.add(prop);
+		}
+	}
+	
+	public final Iterator<Property> iterator(){
+		return this.props.iterator();
 	}
 	
 	public void write() throws Exception{

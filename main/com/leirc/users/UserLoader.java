@@ -2,40 +2,77 @@ package com.leirc.users;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 import com.leirc.api.LeIRCApi;
 import com.leirc.api.rsrc.Resources;
 import com.leirc.api.user.User;
+import com.leirc.api.user.UserHelper;
 import com.leirc.utils.FileUtils;
 
 public final class UserLoader{
-	public static void loadUsers(){
+	public static synchronized boolean loadUsers(){
 		try{
-			LeIRCApi.executor.submit(new UserLoaderThread());
+			Future<Boolean> ret = LeIRCApi.executor.submit(new UserLoaderThread());
+			return ret.get();
 		} catch(Exception ex){
 			ex.printStackTrace(System.err);
+			return false;
 		}
 	}
 	
-	private static final class UserLoaderThread implements Runnable{
+	public static synchronized boolean offloadUserData(){
+		try{
+			Future<Boolean> ret = LeIRCApi.executor.submit(new UserOffLoaderThread());
+			return ret.get();
+		} catch(Exception ex){
+			ex.printStackTrace(System.err);
+			return false;
+		}
+	}
+	
+	private static final class UserLoaderThread implements Callable<Boolean>{
 		@Override
-		public void run(){
+		public Boolean call() throws Exception{
 			try{
 				List<File> users = FileUtils.getAllFilesIn(Resources.USERS, ".json");
 				
 				System.out.println(String.format("Loading %s users", users.size()));
 				
 				for(File file : users){
-					User user = User.loadData(LeIRCApi.gson, file);
-					loadUser(user);
+					loadUser(file);
 				}
+				
+				return true;
 			} catch(Exception ex){
 				ex.printStackTrace(System.err);
+				return false;
 			}
 		}
 		
-		private void loadUser(User user){
-			System.out.println(String.format("Loading User: %s", user.toString()));
+		private void loadUser(File file){
+			UserHelper.users.add(User.loadData(LeIRCApi.gson, file));
+		}
+	}
+	
+	private static final class UserOffLoaderThread implements Callable<Boolean>{
+		@Override
+		public Boolean call() throws Exception{
+			try{
+				List<User> users = UserHelper.users;
+				
+				for(User user : users){
+					if(user != null){
+						UserHelper.writeUserData(user);
+					}
+				}
+				
+				return true;
+			} catch(Exception ex){
+				ex.printStackTrace(System.err);
+				return false;
+			}
 		}
 	}
 }

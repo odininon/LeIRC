@@ -1,6 +1,8 @@
 package com.leirc.api.gui;
 
-public interface IGUI{
+import java.io.Serializable;
+
+public interface IGUI extends Serializable{
 	public String getUID();
 	public void openGui();
 	public void closeGui();

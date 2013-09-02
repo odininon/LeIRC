@@ -18,35 +18,35 @@ public final class Property{
 	}
 	
 	public String asString(){
-		return (String) this.getValue();
+		return String.valueOf(this.getValue());
 	}
 	
 	public int asInteger(){
-		return (Integer) this.getValue();
+		return  Integer.valueOf(this.asString());
 	}
 	
 	public short asShort(){
-		return (Short) this.getValue();
+		return Short.valueOf(this.asString());
 	}
 	
 	public double asDouble(){
-		return (Double) this.getValue();
+		return Double.valueOf(this.asString());
 	}
 	
 	public float asFloat(){
-		return (Float) this.getValue();
+		return Float.valueOf(this.asString());
 	}
 	
 	public char asChar(){
-		return (Character) this.getValue();
+		return this.asString().toCharArray()[0];
 	}
 	
 	public boolean asBoolean(){
-		return (Boolean) this.getValue();
+		return Boolean.valueOf(this.asString());
 	}
 	
 	public byte asByte(){
-		return (Byte) this.getValue();
+		return Byte.valueOf(this.asString());
 	}
 	
 	public boolean isExactSame(Property prop){

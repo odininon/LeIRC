@@ -1,5 +1,7 @@
 package com.leirc.api.plugin;
 
-public interface IPlugin {
+import java.io.Serializable;
 
+public interface IPlugin extends Serializable{
+	
 }

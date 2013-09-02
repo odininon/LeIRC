@@ -11,6 +11,7 @@ public final class UserHelper{
 	private UserHelper(){}
 	
 	public static final User DEFAULT = new User("Default");
+	public static User CURRENT = DEFAULT;
 
 	public static final List<User> users = new LinkedList<User>();
 	
@@ -35,9 +36,45 @@ public final class UserHelper{
 		}
 	}
 	
+	public static User getUser(String name){
+		for(User user : users){
+			if(user.getName().equals(name)){
+				return user;
+			}
+		}
+		
+		if(hasUserFile(name)){
+			return loadUserData(name);
+		} else{
+			return null;
+		}
+	}
+	
+	public static boolean userLoaded(String name){
+		for(User user : users){
+			if(user.getName().equals(name)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public static boolean hasUserFile(String name){
+		return getUserFile(name).exists();
+	}
+	
 	public static User loadUserData(String name){
 		try{
-			return User.loadData(LeIRCApi.gson, getUserFile(name));
+			if(userLoaded(name)){
+				return getUser(name);
+			} else{
+				if(hasUserFile(name)){
+					return User.loadData(LeIRCApi.gson, getUserFile(name));
+				} else{
+					return null;
+				}
+			}
 		} catch(Exception ex){
 			ex.printStackTrace(System.err);
 			return null;

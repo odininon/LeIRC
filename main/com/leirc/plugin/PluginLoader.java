@@ -8,14 +8,14 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 import com.leirc.api.LeIRCApi;
+import com.leirc.api.event.EventHandler;
+import com.leirc.api.event.events.PluginLoadedEvent;
 import com.leirc.api.plugin.IPlugin;
 import com.leirc.api.plugin.PluginManifest;
 import com.leirc.api.rsrc.Resources;
 import com.leirc.utils.FileUtils;
 
 public final class PluginLoader{
-	private PluginLoader(){}
-	
 	public static synchronized boolean loadPlugins(){
 		try{
 			Future<Boolean> ret = LeIRCApi.executor.submit(new PluginLoaderThread());
@@ -54,7 +54,7 @@ public final class PluginLoader{
 				URLClassLoader loader = URLClassLoader.newInstance(new URL[]{jar.toURI().toURL()});
 				Class<?> clazz = loader.loadClass(manifest.getIPluginClasspath());
 				IPlugin plugin = (IPlugin) clazz.newInstance();
-				System.out.println(plugin);
+				EventHandler.postEvent(new PluginLoadedEvent(plugin), true);
 			}
 		}
 	}

@@ -15,6 +15,7 @@ public final class Resources{
 	public static final File BIN = new File(HOME, ".bin");
 	public static final File USERS = new File(HOME, "users");
 	public static final File SKINS = new File(HOME, ".skins");
+	public static final File EVENT_CACHE = new File(BIN, "events");
 	
 	public static void checkDirs(){
 		checkDir(HOME);
@@ -24,6 +25,7 @@ public final class Resources{
 		checkDir(BIN);
 		checkDir(USERS);
 		checkDir(SKINS);
+		checkDir(EVENT_CACHE);
 	}
 	
 	private static void checkDir(File dir){
@@ -41,6 +43,16 @@ public final class Resources{
 			if(DEBUG){
 				System.out.println(String.format("Dir Exists: %s", dir.getAbsolutePath()));
 			}
+		}
+	}
+	
+	public static void clearEventCache(){
+		try{
+			for(File file : EVENT_CACHE.listFiles()){
+				file.delete();
+			}
+		} catch(Exception ex){
+			ex.printStackTrace(System.err);
 		}
 	}
 }

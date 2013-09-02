@@ -2,10 +2,14 @@ package com.leirc;
 
 import java.util.Iterator;
 
+import javax.swing.SwingUtilities;
+
 import com.leirc.api.LeIRCApi;
 import com.leirc.api.cfg.Property;
 import com.leirc.api.rsrc.Resources;
+import com.leirc.api.user.UserHelper;
 import com.leirc.cfg.Configuration;
+import com.leirc.gui.GuiMainWindow;
 import com.leirc.plugin.PluginLoader;
 import com.leirc.users.UserLoader;
 
@@ -17,7 +21,21 @@ public final class LeIRC{
 		loadConfiguration();
 		loadPlugins();
 		loadUsers();
-		cleanup(0);
+		start();
+	}
+	
+	public static void start(){
+		try{
+			SwingUtilities.invokeLater(new Runnable(){
+				@Override
+				public void run(){
+					GuiMainWindow main = new GuiMainWindow();
+					main.openGui();
+				}
+			});
+		} catch(Exception ex){
+			ex.printStackTrace(System.err);
+		}
 	}
 	
 	public static void debugConfig(){
@@ -44,6 +62,7 @@ public final class LeIRC{
 		try{
 			boolean done = UserLoader.loadUsers();
 			do{}while(!done);
+			UserHelper.CURRENT = UserHelper.getUser(config.getProperty("LastUser").asString());
 		} catch(Exception ex){
 			ex.printStackTrace(System.err);
 		}
@@ -73,6 +92,7 @@ public final class LeIRC{
 			}
 			
 			config.addProperty("LastUser", "Default");
+			config.addProperty("Debug", true);
 		} catch(Exception ex){
 			ex.printStackTrace(System.err);
 		}
@@ -81,6 +101,7 @@ public final class LeIRC{
 	public static void loadResources(){
 		try{
 			Resources.checkDirs();
+			Resources.clearEventCache();
 		} catch(Exception ex){
 			ex.printStackTrace(System.err);
 		}

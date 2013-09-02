@@ -40,7 +40,7 @@ public final class EventHandler{
 		public void run(){
 			String name = String.format("%s-%s.event", this.event.getUID(), formatter.format(new Date()));
 			
-			try(ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(new File(Resources.BIN, name)))){
+			try(ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(new File(Resources.EVENT_CACHE, name)))){
 				stream.writeObject(this.event);
 				stream.flush();
 				

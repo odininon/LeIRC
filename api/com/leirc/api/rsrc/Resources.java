@@ -14,6 +14,7 @@ public final class Resources{
 	public static final File LANG = new File(HOME, ".lang");
 	public static final File BIN = new File(HOME, ".bin");
 	public static final File USERS = new File(HOME, "users");
+	public static final File SKINS = new File(HOME, ".skins");
 	
 	public static void checkDirs(){
 		checkDir(HOME);
@@ -22,6 +23,7 @@ public final class Resources{
 		checkDir(LANG);
 		checkDir(BIN);
 		checkDir(USERS);
+		checkDir(SKINS);
 	}
 	
 	private static void checkDir(File dir){

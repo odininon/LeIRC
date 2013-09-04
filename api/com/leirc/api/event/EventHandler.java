@@ -8,6 +8,7 @@ import java.util.Date;
 
 import com.leirc.api.LeIRCApi;
 import com.leirc.api.rsrc.Resources;
+import com.leirc.api.rsrc.SessionData;
 
 public final class EventHandler{
 	private static final SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
@@ -23,8 +24,15 @@ public final class EventHandler{
 	public static void postEvent(IEvent event, boolean capture){
 		LeIRCApi.bus.post(event);
 		
+		if(SessionData.WIN_COMPAT){
+			return;
+		}
+		
 		if(capture){
-			System.out.println("Capturing Event");
+			if(SessionData.DEBUG){
+				System.out.println("Capturing Event: " + event.getUID());
+			}
+			
 			captureEvent(event);
 		}
 	}
@@ -44,7 +52,9 @@ public final class EventHandler{
 				stream.writeObject(this.event);
 				stream.flush();
 				
-				System.out.println("Done serializing Event: " + name);
+				if(SessionData.DEBUG){
+					System.out.println(String.format("Done capturing event: %s", name));
+				}
 			} catch(Exception ex){
 				ex.printStackTrace(System.err);
 			}

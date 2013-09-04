@@ -5,7 +5,7 @@ import java.io.File;
 public final class Resources{
 	private Resources(){}
 	
-	public static boolean DEBUG = true;
+	public static boolean DEBUG = SessionData.DEBUG;
 	
 	public static final File DESKTOP = new File(new File(System.getProperty("user.home")), "Desktop");
 	public static final File HOME = new File(new File(System.getProperty("user.home")), ".leirc");
@@ -16,6 +16,7 @@ public final class Resources{
 	public static final File USERS = new File(HOME, "users");
 	public static final File SKINS = new File(HOME, ".skins");
 	public static final File EVENT_CACHE = new File(BIN, "events");
+	public static final File LOG = new File(BIN, "logs");
 	
 	public static void checkDirs(){
 		checkDir(HOME);
@@ -26,9 +27,10 @@ public final class Resources{
 		checkDir(USERS);
 		checkDir(SKINS);
 		checkDir(EVENT_CACHE);
+		checkDir(LOG);
 	}
 	
-	private static void checkDir(File dir){
+	public static void checkDir(File dir){
 		if(!dir.exists()){
 			if(DEBUG){
 				System.out.println(String.format("Dir Doesn't Exist: %s", dir.getAbsolutePath()));

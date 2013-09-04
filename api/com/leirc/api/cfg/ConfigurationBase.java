@@ -61,7 +61,9 @@ public abstract class ConfigurationBase{
 	}
 	
 	public final void updateProperty(String name, Object newValue){
-		this.getProperties().add(getPropertyAt(name), new Property(name, newValue));
+		int index = getPropertyAt(name);
+		this.getProperties().remove(index);
+		this.getProperties().add(index, new Property(name, newValue));
 	}
 	
 	public final void addProperty(Property prop){

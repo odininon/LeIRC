@@ -7,6 +7,7 @@ import java.util.concurrent.Future;
 
 import com.leirc.api.LeIRCApi;
 import com.leirc.api.rsrc.Resources;
+import com.leirc.api.rsrc.SessionData;
 import com.leirc.api.user.User;
 import com.leirc.api.user.UserHelper;
 import com.leirc.utils.FileUtils;
@@ -38,7 +39,9 @@ public final class UserLoader{
 			try{
 				List<File> users = FileUtils.getAllFilesIn(Resources.USERS, ".json");
 				
-				System.out.println(String.format("Loading %s users", users.size()));
+				if(SessionData.DEBUG){
+					System.out.println(String.format("Loading %s users", users.size()));
+				}
 				
 				for(File file : users){
 					loadUser(file);

@@ -13,6 +13,7 @@ import com.leirc.api.event.events.PluginLoadedEvent;
 import com.leirc.api.plugin.IPlugin;
 import com.leirc.api.plugin.PluginManifest;
 import com.leirc.api.rsrc.Resources;
+import com.leirc.api.rsrc.SessionData;
 import com.leirc.utils.FileUtils;
 
 public final class PluginLoader{
@@ -34,7 +35,9 @@ public final class PluginLoader{
 				
 				List<File> manifests = FileUtils.getAllFilesIn(Resources.PLUGINS, ".json");
 				
-				System.out.println(String.format("Loading %s plugins", manifests.size()));
+				if(SessionData.DEBUG){
+					System.out.println(String.format("Loading %s plugins", manifests.size()));
+				}
 				
 				for(File file : manifests){
 					PluginManifest manifest = PluginManifest.loadData(LeIRCApi.gson, file);
@@ -54,7 +57,8 @@ public final class PluginLoader{
 				URLClassLoader loader = URLClassLoader.newInstance(new URL[]{jar.toURI().toURL()});
 				Class<?> clazz = loader.loadClass(manifest.getIPluginClasspath());
 				IPlugin plugin = (IPlugin) clazz.newInstance();
-				EventHandler.postEvent(new PluginLoadedEvent(plugin), true);
+				EventHandler.postEvent(new PluginLoadedEvent(plugin, manifest.getName()), true);
+				plugin.load();
 			}
 		}
 	}

@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.leirc.api.LeIRCApi;
 import com.leirc.api.rsrc.Resources;
+import com.leirc.api.rsrc.SessionData;
 
 public final class UserHelper{
 	private UserHelper(){}
@@ -26,6 +27,15 @@ public final class UserHelper{
 	
 	public static File getUserFile(String name){
 		return getUserFile(name, Resources.USERS);
+	}
+	
+	public static void updateCurrentUser(User user){
+		if(!users.contains(user)){
+			users.add(user);
+		}
+		
+		CURRENT = user;
+		SessionData.CURRENT_USER = user;
 	}
 	
 	public static void writeUserData(User user){
@@ -58,6 +68,14 @@ public final class UserHelper{
 		}
 		
 		return false;
+	}
+
+	public static User getOrCreate(String name){
+		if(userLoaded(name)){
+			return getUser(name);
+		} else{
+			return new User(name);
+		}
 	}
 	
 	public static boolean hasUserFile(String name){

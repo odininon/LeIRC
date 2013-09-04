@@ -20,6 +20,7 @@ import com.leirc.cfg.Configuration;
 import com.leirc.cmd.CMDCreateUser;
 import com.leirc.gui.GuiMainWindow;
 import com.leirc.gui.menubar.FileMenu;
+import com.leirc.gui.menubar.ServerMenu;
 import com.leirc.plugin.PluginLoader;
 import com.leirc.users.UserLoader;
 
@@ -44,6 +45,7 @@ public final class LeIRC{
 	
 	public static void registerMenubarItems(){
 		GuiHelper.registerMenu(new FileMenu());
+		GuiHelper.registerMenu(new ServerMenu());
 	}
 	
 	public static void addCommands() throws Exception{

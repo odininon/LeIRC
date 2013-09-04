@@ -10,6 +10,7 @@ import javax.swing.JMenuItem;
 import com.leirc.LeIRC;
 import com.leirc.api.gui.menubar.LeIRCMenu;
 import com.leirc.gui.GuiMainWindow;
+import com.leirc.gui.dialog.CreateUserDialog;
 import com.leirc.gui.dialog.SelectUserDialog;
 
 public class FileMenu extends LeIRCMenu{
@@ -27,7 +28,7 @@ public class FileMenu extends LeIRCMenu{
 			}
 		});
 		
-		JMenuItem selectUserButton = new JMenuItem("User");
+		JMenuItem selectUserButton = new JMenuItem("Select User");
 		selectUserButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent event){
@@ -36,7 +37,17 @@ public class FileMenu extends LeIRCMenu{
 			}
 		});
 		
+		JMenuItem createUserButton = new JMenuItem("Create User");
+		createUserButton.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent event){
+				JDialog dialog = new CreateUserDialog(GuiMainWindow.getFrame());
+				dialog.setVisible(true);
+			}
+		});
+		
 		menu.add(selectUserButton);
+		menu.add(createUserButton);
 		menu.addSeparator();
 		menu.add(exitButton);
 	}

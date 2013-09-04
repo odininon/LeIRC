@@ -3,11 +3,14 @@ package com.leirc.gui.menubar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import com.leirc.LeIRC;
 import com.leirc.api.gui.menubar.LeIRCMenu;
+import com.leirc.gui.GuiMainWindow;
+import com.leirc.gui.dialog.SelectUserDialog;
 
 public class FileMenu extends LeIRCMenu{
 	private static final long serialVersionUID = -1410116335053915936L;
@@ -28,7 +31,8 @@ public class FileMenu extends LeIRCMenu{
 		selectUserButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent event){
-				
+				JDialog dialog = new SelectUserDialog(GuiMainWindow.getFrame());
+				dialog.setVisible(true);
 			}
 		});
 		

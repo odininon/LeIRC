@@ -15,11 +15,21 @@ public final class PluginManifest implements IJSON{
 	private String pluginName;
 	private String jar;
 	private String classPath;
+	private String[] conflictedPlugins;
+	private String[] requiredPlugins;
 	
 	public PluginManifest(){}
 	
 	public String getName(){
 		return this.pluginName;
+	}
+	
+	public void setRequiredPlugins(String[] plugins){
+		this.requiredPlugins = plugins;
+	}
+	
+	public void setConflictedPlugins(String[] plugins){
+		this.conflictedPlugins = plugins;
 	}
 	
 	public void setPluginName(String name){
@@ -34,6 +44,14 @@ public final class PluginManifest implements IJSON{
 		this.classPath = classPath;
 	}
 	
+	public String[] getConflictedPlugins(){
+		return this.conflictedPlugins;
+	}
+	
+	public String[] getRequiredPlugins(){
+		return this.requiredPlugins;
+	}
+	
 	public String getIPluginClasspath(){
 		return this.classPath;
 	}
@@ -43,7 +61,9 @@ public final class PluginManifest implements IJSON{
 	}
 	
 	public boolean isValid(){
-		return (this.getJarName() != null) && (this.getIPluginClasspath() != null) && (this.getName() != null);
+		return (this.getJarName() != null) &&
+			   (this.getIPluginClasspath() != null) &&
+			   (this.getName() != null);
 	}
 	
 	@Override

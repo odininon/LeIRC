@@ -11,7 +11,6 @@ import com.google.gson.GsonBuilder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.leirc.api.os.OS;
-import com.leirc.api.plugin.PluginManifest;
 import com.leirc.api.prov.LeIRCApiModule;
 import com.thoughtworks.xstream.XStream;
 
@@ -30,11 +29,6 @@ public final class LeIRCApi{
 	public static final ExecutorService cmdExecutor = Executors.newCachedThreadPool();
 	
 	public static OS currentOS;
-	
-	static
-	{
-		stream.alias("manifest", PluginManifest.class);
-	}
 	
 	private static OS getCurrentOS(){
 		String osName = System.getProperty("os.name").toLowerCase();

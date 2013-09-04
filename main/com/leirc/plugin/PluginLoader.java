@@ -12,6 +12,7 @@ import com.leirc.api.event.EventHandler;
 import com.leirc.api.event.events.PluginLoadedEvent;
 import com.leirc.api.plugin.IPlugin;
 import com.leirc.api.plugin.PluginManifest;
+import com.leirc.api.plugin.Plugins;
 import com.leirc.api.rsrc.Resources;
 import com.leirc.api.rsrc.SessionData;
 import com.leirc.utils.FileUtils;
@@ -51,14 +52,41 @@ public final class PluginLoader{
 			}
 		}
 		
-		private void loadPlugin(PluginManifest manifest) throws Exception{
+		private void loadPlugin(PluginManifest manifest) throws Exception{			
 			if(manifest.isValid()){
+				checkConflicts(manifest.getConflictedPlugins());
+				checkDeps(manifest.getRequiredPlugins());
+				
 				File jar = new File(Resources.PLUGINS, manifest.getJarName());
 				URLClassLoader loader = URLClassLoader.newInstance(new URL[]{jar.toURI().toURL()});
 				Class<?> clazz = loader.loadClass(manifest.getIPluginClasspath());
 				IPlugin plugin = (IPlugin) clazz.newInstance();
 				EventHandler.postEvent(new PluginLoadedEvent(plugin, manifest.getName()), true);
 				plugin.load();
+			}
+		}
+		
+		private void checkConflicts(String[] params){
+			if(params == null){
+				return;
+			}
+			
+			for(String plug : params){
+				if(Plugins.pluginLoaded(plug)){
+					throw new RuntimeException("Plugin Loaded: " + plug);
+				}
+			}
+		}
+		
+		private void checkDeps(String[] params){
+			if(params == null){
+				return;
+			}
+			
+			for(String plug : params){
+				if(!Plugins.pluginLoaded(plug)){
+					throw new RuntimeException("Plugin Not Loaded: " + plug);
+				}
 			}
 		}
 	}

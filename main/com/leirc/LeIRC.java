@@ -9,6 +9,9 @@ import com.alee.laf.WebLookAndFeel;
 import com.leirc.api.LeIRCApi;
 import com.leirc.api.cfg.Property;
 import com.leirc.api.cmd.CommandHelper;
+import com.leirc.api.event.EventHandler;
+import com.leirc.api.event.events.ShutdownRequestedEvent;
+import com.leirc.api.gui.GuiHelper;
 import com.leirc.api.os.OS;
 import com.leirc.api.rsrc.Resources;
 import com.leirc.api.rsrc.SessionData;
@@ -16,6 +19,7 @@ import com.leirc.api.user.UserHelper;
 import com.leirc.cfg.Configuration;
 import com.leirc.cmd.CMDCreateUser;
 import com.leirc.gui.GuiMainWindow;
+import com.leirc.gui.menubar.FileMenu;
 import com.leirc.plugin.PluginLoader;
 import com.leirc.users.UserLoader;
 
@@ -27,14 +31,19 @@ public final class LeIRC{
 		loadConfiguration();
 		setLAF();
 		setSessionData();
-		loadPlugins();
 		loadUsers();
+		loadPlugins();
 		addCommands();
+		registerMenubarItems();
 		if(SessionData.DEBUG){
 			debugSessionData();
 			debugConfig();
 		}
 		start();
+	}
+	
+	public static void registerMenubarItems(){
+		GuiHelper.registerMenu(new FileMenu());
 	}
 	
 	public static void addCommands() throws Exception{
@@ -68,6 +77,7 @@ public final class LeIRC{
 			SessionData.FIRST_LAUNCH = config.getProperty("FirstTime").asBoolean();
 			SessionData.DEBUG = config.getProperty("Debug").asBoolean();
 			Resources.DEBUG = config.getProperty("Debug").asBoolean();
+//			SessionData.CURRENT_VERSION = new LeVersion(VersionType.ALPHA, "1.4.0");
 		} catch(Exception ex){
 			ex.printStackTrace(System.err);
 		}
@@ -80,6 +90,7 @@ public final class LeIRC{
 			System.out.println("Current User: " + SessionData.CURRENT_USER);
 			System.out.println("Debug: " + SessionData.DEBUG);
 			System.out.println("First Time: " + SessionData.FIRST_LAUNCH);
+//			System.out.println("Current Version: " + SessionData.CURRENT_VERSION);
 			System.out.println("==============================");
 		} catch(Exception ex){
 			ex.printStackTrace(System.err);
@@ -136,6 +147,12 @@ public final class LeIRC{
 			do{}while(!done);
 			UserHelper.CURRENT = UserHelper.getUser(config.getProperty("LastUser").asString());
 			SessionData.CURRENT_USER = UserHelper.getUser(config.getProperty("LastUser").asString());
+			
+			if(UserHelper.CURRENT == null || SessionData.CURRENT_USER == null){
+				UserHelper.CURRENT = UserHelper.DEFAULT;
+				SessionData.CURRENT_USER = UserHelper.DEFAULT;
+				config.updateProperty("LastUser", "Default");
+			}
 		} catch(Exception ex){
 			ex.printStackTrace(System.err);
 		}
@@ -143,6 +160,7 @@ public final class LeIRC{
 	
 	public static void cleanup(int exit){
 		try {
+			EventHandler.postEvent(new ShutdownRequestedEvent(exit, null), true);
 			if(SessionData.FIRST_LAUNCH){
 				config.updateProperty("FirstTime", false);
 			}

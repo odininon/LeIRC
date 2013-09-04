@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import com.leirc.LeIRC;
 import com.leirc.api.cmd.CommandHelper;
 import com.leirc.api.gui.GuiBase;
+import com.leirc.api.gui.GuiHelper;
 import com.leirc.api.user.UserHelper;
 
 public final class GuiMainWindow extends GuiBase{
@@ -34,6 +35,7 @@ public final class GuiMainWindow extends GuiBase{
 		frame.setTitle(UserHelper.CURRENT.getName() + "|LeIRC");
 		frame.setSize(new Dimension(1000, 640));
 		frame.add(new BottomPanel(), BorderLayout.SOUTH);
+		GuiHelper.injectMenuBarIntoFrame(getFrame());
 	}
 	
 	public static final JFrame getFrame(){

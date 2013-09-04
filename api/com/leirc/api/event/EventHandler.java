@@ -2,6 +2,7 @@ package com.leirc.api.event;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.NotSerializableException;
 import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,6 +56,9 @@ public final class EventHandler{
 				if(SessionData.DEBUG){
 					System.out.println(String.format("Done capturing event: %s", name));
 				}
+			} catch(NotSerializableException ex){
+				System.err.println("Ignoring NotSerializableException");
+				return;
 			} catch(Exception ex){
 				ex.printStackTrace(System.err);
 			}

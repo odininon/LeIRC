@@ -17,9 +17,11 @@ import com.leirc.api.rsrc.Resources;
 import com.leirc.api.rsrc.SessionData;
 import com.leirc.api.user.UserHelper;
 import com.leirc.cfg.Configuration;
+import com.leirc.cmd.CMDCheckProperty;
 import com.leirc.cmd.CMDCreateUser;
 import com.leirc.gui.GuiMainWindow;
 import com.leirc.gui.menubar.FileMenu;
+import com.leirc.gui.menubar.HelpMenu;
 import com.leirc.gui.menubar.ServerMenu;
 import com.leirc.plugin.PluginLoader;
 import com.leirc.users.UserLoader;
@@ -32,24 +34,28 @@ public final class LeIRC{
 		loadConfiguration();
 		setLAF();
 		setSessionData();
+		registerMenubarItems();
 		loadUsers();
 		loadPlugins();
 		addCommands();
-		registerMenubarItems();
+		
 		if(SessionData.DEBUG){
 			debugSessionData();
 			debugConfig();
 		}
+		
 		start();
 	}
 	
 	public static void registerMenubarItems(){
 		GuiHelper.registerMenu(new FileMenu());
 		GuiHelper.registerMenu(new ServerMenu());
+		GuiHelper.registerMenu(new HelpMenu());
 	}
 	
 	public static void addCommands() throws Exception{
 		CommandHelper.registerCommand(new CMDCreateUser());
+		CommandHelper.registerCommand(new CMDCheckProperty());
 	}
 	
 	public static void setLAF() throws Exception{

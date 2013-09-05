@@ -6,9 +6,20 @@ public abstract class CommandBase implements ICommand{
 	private static final long serialVersionUID = -2737024987333493460L;
 	private final String uid;
 	private String[] params;
+	private final String information;
 	
 	protected CommandBase(String uid){
+		this(uid, null);
+	}
+	
+	protected CommandBase(String uid, String information){
 		this.uid = uid;
+		this.information = information;
+	}
+	
+	@Override
+	public String getInformation(){
+		return this.information;
 	}
 	
 	protected final String[] getParams(){

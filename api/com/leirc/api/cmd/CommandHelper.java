@@ -20,6 +20,10 @@ public final class CommandHelper{
 		commands.add(command);
 	}
 	
+	public static int getCommandCount(){
+		return commands.size();
+	}
+	
 	public static ICommand get(String name){
 		for(ICommand command : commands){
 			if(command.getUID().equals(name)){
@@ -28,6 +32,21 @@ public final class CommandHelper{
 		}
 		
 		return null;
+	}
+	
+	public static List<ICommand> commands(){
+		return commands;
+	}
+	
+	public static String[][] generateJTableArray(){
+		String[][] array = new String[commands.size()][2];
+		
+		for(int i = 0; i < commands.size(); i++){
+			array[i][0] = commands.get(i).getUID();
+			array[i][1] = commands.get(i).getInformation();
+		}
+		
+		return array;
 	}
 	
 	public static void executeCommand(String name, String[] params){
